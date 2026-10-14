@@ -1,6 +1,6 @@
 VENV = .venv
 
-.PHONY: install run format lint typecheck check hooks
+.PHONY: install run format lint typecheck test check hooks
 
 $(VENV)/bin/activate:
 	python3 -m venv $(VENV)
@@ -11,7 +11,8 @@ install: $(VENV)/bin/activate
 run:
 	$(VENV)/bin/uvicorn hello_api.main:app --reload --port 8000
 
-
+test:
+	$(VENV)/bin/pytest
 
 format:
 	$(VENV)/bin/ruff format .
@@ -24,7 +25,7 @@ lint:
 typecheck:
 	$(VENV)/bin/mypy
 
-check: lint typecheck
+check: lint typecheck test
 
 hooks:
 	$(VENV)/bin/pre-commit install
